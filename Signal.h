@@ -25,6 +25,7 @@ public:
 	{
 		MODE			mode;
 		int			temp;
+		char   ip[10];
 		// add whenever you need more....
 	};
 

@@ -70,7 +70,9 @@ void ThreadFunc1(LPVOID cBuff)
 
 	while (1)
 	{
-		sprintf_s(buffer, "Data From mode 1 aggregator,");
+		/*sprintf_s(buffer, "Data From mode 1 aggregator,");*/
+		//
+
 		server->write((BYTE*)buffer);
 		std::cout << "Aggregator Mode 1: " << buffer << std::endl;
 		Sleep(1500);

@@ -101,7 +101,7 @@ int main()
 			signal.getSignalDSP()->func[0] = 1;
 			signal.getSignalDSP()->func[1] = 2;
 		}
-		else if (funcComb = 2) {
+		else if (funcComb == 2) {
 			signal.getSignalDSP()->func[0] = 3;
 			signal.getSignalDSP()->func[1] = 2;
 		}

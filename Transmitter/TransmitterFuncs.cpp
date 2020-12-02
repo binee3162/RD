@@ -88,6 +88,7 @@ void ThreadFunc1(LPVOID cBuff)
 	while (1)
 	{
 		client->read((BYTE*)buffer);
+
 		std::cout << "Transmitter Mode 1: " << buffer << std::endl;
 
 
