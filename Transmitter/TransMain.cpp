@@ -16,7 +16,7 @@ wchar_t* charToWchar(const char* str)
 int main()
 {
 	using namespace std;
-	cout << "Hello from Transmitter" << endl;	
+	/*cout << "Hello from Transmitter" << endl;	
 	auto server = SMIPC::Server::Server("Trans2DSP", 2,true);
 	auto client = SMIPC::Client::Client("DSP2Trans", 2, 1);
 	if (GetLastError() != 0) {
@@ -32,34 +32,20 @@ int main()
 	if (signalTrans == NULL) {
 		std::cout << "Signal.c: Mapping File error! " << __LINE__ << std::endl;
 		return 1;
-	}
-	cout << signalTrans->mode << endl;
-	int currentmode = signalTrans->mode;    //or some other mode structure. depends on your application 
-	HANDLE thread = StartNewThread(currentmode, (SMIPC::SMIPC_OBJ*) & client);   //master or slave mode should be checked, data here might be server
+	}*/
+	auto transFuncs = TransmitterFuncs();
+	int currentmode = transFuncs.signalTrans->mode;    //or some other mode structure. depends on your application 
+	HANDLE thread = transFuncs.StartNewThread(currentmode);   //master or slave mode should be checked, data here might be server
 #define END 10    
 	//example...  can be delete afterwards
 	while (1) {
-		if (currentmode != signalTrans->mode) {
-			currentmode = signalTrans->mode;
+		if (currentmode != transFuncs.signalTrans->mode) {
+			currentmode = transFuncs.signalTrans->mode;
 			//cout << "mode change to "<<signalTrans->mode << endl;
 			//break;
 			if (currentmode == END)
 				break;
-				
-
-		//terminate old thread
-		if (client.tryLock()) {
-			TerminateThread(thread, 0);
-			client.unlock();
-		}
-		client.unlock();
-		TerminateThread(thread, 0);
-		thread = StartNewThread(currentmode, (SMIPC::SMIPC_OBJ*) & client);
-		
-				
-
-			
-			
+			transFuncs.StartNewThread(currentmode, thread);
 		}
 		Sleep(500);  //check mode change every 0.5s
 	}

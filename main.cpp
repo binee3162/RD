@@ -77,6 +77,7 @@ int main()
 	// startChildProcess
 	bool errFlag;
 	MODE mode = 0;
+
 	startChildProcess(errFlag);
 	if (errFlag) {
 		std::cout << "error when start ChildProcess" << endl;
@@ -91,14 +92,26 @@ int main()
 		MODE premode = mode;
 		cin >>mode;
 		if (premode != mode) {
-			TerminateThread(listenerThread, 0);
-			listenerThread = signal.StartNewThread(mode);
-
-			signal.getSignalAggre()->mode = (int)mode;
-			signal.getSignalDSP()->mode = (int)mode;
-			signal.getSignalTrans()->mode = (int)mode;
+			signal.StartNewTHread(mode, listenerThread);
+			signal.ChangeMode(mode);
 		}
-
+		MODE funcComb = 0;
+		cin >> funcComb;
+		if (funcComb == 1) {
+			signal.getSignalDSP()->func[0] = 1;
+			signal.getSignalDSP()->func[1] = 2;
+		}
+		else if (funcComb = 2) {
+			signal.getSignalDSP()->func[0] = 3;
+			signal.getSignalDSP()->func[1] = 2;
+		}
+		else {
+			signal.getSignalDSP()->func[0] = 3;
+			signal.getSignalDSP()->func[1] = 2;
+			signal.getSignalDSP()->func[3] = 1;
+			signal.getSignalDSP()->func[4] = 5;
+		}
+		
 		Sleep(1000);
 
 	}

@@ -181,6 +181,19 @@ void Signal::InitSharedMemory()
 	 }
  }
 
+ void Signal::StartNewTHread(MODE mode, HANDLE& thread)
+ {
+	 TerminateThread(thread, 0);
+	 thread = StartNewThread(mode);
+ }
+
+ void Signal::ChangeMode(MODE mode)
+ {
+	 this->getSignalAggre()->mode = mode;
+	 this->getSignalDSP()->mode = mode;
+	 this->getSignalTrans()->mode = mode;
+ }
+
 
 
 

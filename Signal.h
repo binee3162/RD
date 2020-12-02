@@ -18,6 +18,7 @@ public:
 	{
 		MODE			mode;
 		int			temp;
+		int			func[5]; //assume we only have 5 dsp functions.
 		// add whenever you need more....
 	};
 	struct SM_Transmitter      //this structure is used to format the information transferred//between GUI process and transmitter process				
@@ -69,8 +70,8 @@ public:
 		return t;
 	}
 	HANDLE StartNewThread(MODE mode);
-	HANDLE StartNewTHread(MODE mode, MODE premode);
-
+	void StartNewTHread(MODE mode, HANDLE& thread);
+	void ChangeMode(MODE mode);
 };
 void	ThreadFuncMode0(LPVOID para);
 void	ThreadFunc(LPVOID para);  
