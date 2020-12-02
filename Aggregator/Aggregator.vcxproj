@@ -135,7 +135,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="AggregatorFuncs.cpp" />
+    <ClCompile Include="AggreMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AggregatorFuncs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

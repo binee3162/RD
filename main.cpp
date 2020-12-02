@@ -34,12 +34,12 @@ void startChildProcess(bool& errorFlag)
 	//start DSP process
 	STARTUPINFO si_dsp;
 	PROCESS_INFORMATION pi_dsp;
-	char path[100] = ".\\Debug\\DSP.exe";
+	char path1[100] = ".\\Debug\\DSP.exe";
 	ZeroMemory(&si_dsp, sizeof(si_dsp));
 	si_dsp.cb = sizeof(si_dsp);
 	ZeroMemory(&pi_dsp, sizeof(pi_dsp));
 	// Start the child process.
-	if (!CreateProcess(NULL,path, NULL,NULL,FALSE,0,NULL,NULL,&si_dsp,&pi_dsp))
+	if (!CreateProcess(NULL,path1, NULL,NULL,FALSE,0,NULL,NULL,&si_dsp,&pi_dsp))
 	{
 		std::cout << "Create DSP Process failed: " << GetLastError() << __LINE__ << std::endl;
 		return;
@@ -47,12 +47,12 @@ void startChildProcess(bool& errorFlag)
 	//start Transmitter process
 	STARTUPINFO si_trans;
 	PROCESS_INFORMATION pi_trans;
-	char path[100] = ".\\Debug\\Transmitter.exe";
+	char path2[100] = ".\\Debug\\Transmitter.exe";
 	ZeroMemory(&si_trans, sizeof(si_trans));
 	si_trans.cb = sizeof(si_trans);
 	ZeroMemory(&pi_trans, sizeof(pi_trans));
 	// Start the child process.
-	if (!CreateProcess(NULL, path, NULL, NULL, FALSE, 0, NULL, NULL, &si_trans, &pi_trans))
+	if (!CreateProcess(NULL, path2, NULL, NULL, FALSE, 0, NULL, NULL, &si_trans, &pi_trans))
 	{
 		std::cout << "Create Transmitter Process failed: " << GetLastError() << __LINE__ << std::endl;
 		return;
@@ -64,25 +64,44 @@ void startChildProcess(bool& errorFlag)
 
 int main()
 {
+	HANDLE listenerThread;
 	auto signal=Signal();
-	
+	signal.InitSignal();
+	signal.InitSharedMemory();
 	//set mode. This step should be down in GUI.
 	//example mode setting 
-	signal.getSignalAggre()->mode = 1;
-	signal.getSignalDSP()->mode = 1;
-	signal.getSignalTrans()->mode = 1;
+
+	//signal.getSignalAggre()->mode = 1;
+	//signal.getSignalDSP()->mode = 1;
+	//signal.getSignalTrans()->mode = 1;
 	// startChildProcess
 	bool errFlag;
+	MODE mode = 0;
 	startChildProcess(errFlag);
 	if (errFlag) {
 		std::cout << "error when start ChildProcess" << endl;
 		return 1;
 	}
+	cout << "successful!" << endl;
 
-	
+	listenerThread = signal.StartNewThread(mode);
 
 
+	while (1) {
+		MODE premode = mode;
+		cin >>mode;
+		if (premode != mode) {
+			TerminateThread(listenerThread, 0);
+			listenerThread = signal.StartNewThread(mode);
 
+			signal.getSignalAggre()->mode = (int)mode;
+			signal.getSignalDSP()->mode = (int)mode;
+			signal.getSignalTrans()->mode = (int)mode;
+		}
+
+		Sleep(1000);
+
+	}
 
 
 

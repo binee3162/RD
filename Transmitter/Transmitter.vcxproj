@@ -135,7 +135,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="TransMain.cpp" />
+    <ClCompile Include="TransmitterFuncs.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TransmitterFuncs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
