@@ -42,8 +42,8 @@ public:
 
     void prepareToPlay (int, double) override 
     {
-        mCircInBuffer.setSize(2, 1792); //size is frameSize + 3 * stepSize
-        mCircOutBuffer.setSize(2, 4096);
+        mCircInBuffer.setSize(2, frameSize + 3*stepSize); //size is frameSize + 3 * stepSize
+        mCircOutBuffer.setSize(2, 4*frameSize);
         mInPointer = 0;
         mOutWritePointer = stepSize;
         mOutReadPointer = 0;
@@ -100,7 +100,7 @@ public:
                         mOutReadPointer++;
                         if (mOutReadPointer >= circOutLength) mOutReadPointer = 0; //wrap around
 
-                        //out *= 0.6; //scaling for controlled volume
+                        out *= 0.3; //scaling for controlled volume
                         stepCounter++;
                         if (stepCounter >= stepSize)
                         {
@@ -124,7 +124,7 @@ public:
 
         int mCircIndexIn = (mInPointer - fftSize + circInLength) % circInLength;
 
-        float windbuf[1024] = { 0 };
+        float windbuf[fftSize] = { 0 };
         for (auto i = 0; i < fftSize; ++i)
         {
             windbuf[i] = mCircInBuffer.getSample(channel, mCircIndexIn);
@@ -166,13 +166,13 @@ public:
         //do inverse FFT
         inverseFFT.performRealOnlyInverseTransform(fftData);
         
-        float windbuf2[2048];
+        float windbuf2[fftSize*2];
         for (int i = 0; i < fftSize; ++i)
         {
             windbuf2[i] = fftData[i];
         }
         //window and resample
-        if (pitchShift != 0) interPol.process(pow(2, pitchShift), windbuf2, windbuf, 1024);
+        if (pitchShift != 0) interPol.process(double (1 + pitchShift), windbuf2, windbuf, frameSize);
         
         if (pitchShift != 0) theWindow.multiplyWithWindowingTable(windbuf, frameSize);
         
@@ -200,7 +200,7 @@ public:
         pitchLabel.setBounds(10, 10, 90, 20);
     }
 
-        static constexpr auto fftOrder = 10;
+        static constexpr auto fftOrder = 11;
         static constexpr auto fftSize = 1 << fftOrder; //1024
         
 
@@ -228,8 +228,8 @@ private:
     float prevPhase[fftSize] = { 0 };
     float phaseFinal[fftSize] = { 0 };
 
-    int stepSize { 256 };
-    int frameSize { 1024 };
+    int stepSize { 512 };
+    int frameSize { 2048 };
 
     int stepSizeOut;
     int frameSizeOut;
