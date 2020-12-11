@@ -1,0 +1,6 @@
+The PitchShift_Juce_Standalone folder contains the code for a standalone pitch shift application.
+It processes only one channel, because this is how we wanted to merge it in our project.
+All processing functions are in ProcessingAudioInputTutorial.h
+
+Make sure to include the correct JUCE modules. The modules included are in the folder JUCE library code.
+I run the application via the debugger in Visual Studio.
